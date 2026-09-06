@@ -21,7 +21,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from api import auth
+from api import auth, scrub
 from api.db import Identity, request_transaction
 from audit.writer import chain_head, verify_chain
 from explanation.narrator import explain
@@ -39,6 +39,10 @@ app = FastAPI(
         "but never decides."
     ),
 )
+
+# FR-018: install before any request can be served, so no handler can log raw health
+# data even by accident.
+scrub.install()
 
 app.add_middleware(
     CORSMiddleware,

@@ -61,6 +61,25 @@ def load_snapshot(conn, athlete_id: str) -> AthleteSnapshot:
     )
 
 
+def _supersede_previous(conn, athlete_id: str, new_id: str) -> None:
+    """FR-019: a superseded score is retained, never overwritten.
+
+    Late-arriving data forces a recomputation, and the earlier score stays in the record
+    linked to the one that replaced it. Deleting or updating it in place would erase the
+    reasoning a coach acted on at the time, which is exactly what Principle V protects.
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            """UPDATE risk_assessment
+               SET superseded_by = %s
+               WHERE athlete_id = %s
+                 AND id <> %s
+                 AND superseded_by IS NULL
+                 AND score IS NOT NULL""",
+            (new_id, athlete_id, new_id),
+        )
+
+
 def _persist(conn, result: Assessment | Refusal) -> str:
     """Store the assessment or the refusal. Both are records; neither is discarded."""
     with conn.cursor() as cur:
@@ -143,7 +162,9 @@ def run(identity: Identity, athlete_id: str) -> dict[str, Any]:
         else:
             result = engine_assess(snapshot, now)
             assessment_id = _persist(conn, result)
-            if isinstance(result, Refusal):
+            if isinstance(result, Assessment):
+                _supersede_previous(conn, athlete_id, assessment_id)
+            else:
                 _escalate(conn, result, routed_to="coach")
 
     # FR-008: the audit entry is committed on its own connection before the caller sees

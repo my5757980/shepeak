@@ -20,6 +20,18 @@ from typing import Any
 #: every audit entry, so an unpinned provider is not a usable configuration.
 LLM_MODEL = os.environ.get("SHEPEAK_LLM_MODEL", "").strip()
 
+#: Aliases that float to whatever the provider currently points them at. FR-008 requires the
+#: model version in every audit entry, so an alias is not a pinnable configuration and is
+#: rejected rather than silently accepted.
+_FLOATING_ALIASES = ("latest", "-latest", "default", "stable")
+
+if LLM_MODEL and any(alias in LLM_MODEL.lower() for alias in _FLOATING_ALIASES):
+    raise ValueError(
+        f"SHEPEAK_LLM_MODEL={LLM_MODEL!r} is a floating alias. FR-008 requires the exact "
+        "model version in every audit entry, so pin a specific id (e.g. claude-sonnet-5) "
+        "or leave it unset for deterministic explanations only."
+    )
+
 _BAND_OPENERS = {
     "low": "Your injury risk is low right now.",
     "moderate": "Your injury risk is moderate right now.",
@@ -116,8 +128,13 @@ def is_consistent(text: str, result: dict[str, Any]) -> bool:
         return False
 
     if result.get("requires_coach_approval"):
+        # Deliberately broad. A narrative telling an athlete she may start an elevated-risk
+        # plan unsupervised is the single most damaging thing a model could produce here, so
+        # this errs towards rejecting an innocent phrasing rather than passing a harmful one.
         denies_approval = re.search(
-            r"(no|without|does not need|doesn't need)\s+(coach\s+)?approval", lowered
+            r"\b(?:no|without|do(?:es)?\s+not\s+need|don'?t\s+need|doesn'?t\s+need|"
+            r"needn'?t|not\s+require[ds]?|no\s+need\s+for)\b[^.]{0,40}?\bapprovals?\b",
+            lowered,
         )
         if denies_approval:
             return False
