@@ -1,0 +1,248 @@
+/* ShePeak — design system.
+   Accessibility is a requirement here (FR-027, WCAG 2.2 AA), not a polish step:
+   contrast is checked, focus is always visible, nothing is conveyed by colour alone,
+   and every risk band carries a text label beside its colour. */
+
+:root {
+  --plum-900:#2b0f3a; --plum-800:#3d1652; --plum-700:#54206e;
+  --plum-600:#6d2a8c; --plum-500:#8a3fb0; --plum-100:#f4e9fb;
+  --ink:#1b1420; --ink-soft:#5b5164; --line:#e6dfeb; --bg:#faf7fc; --card:#fff;
+
+  /* Band colours. Each is paired with a text label in the markup — never colour alone. */
+  --low:#0f7b52;      --low-bg:#e7f6ef;
+  --moderate:#8a6100; --moderate-bg:#fdf3dd;
+  --elevated:#b4460b; --elevated-bg:#fdeee4;
+  --high:#a51d2d;     --high-bg:#fdeaec;
+  --refused:#4a4458;  --refused-bg:#f0eef4;
+
+  --radius:14px; --radius-sm:9px;
+  --shadow:0 1px 2px rgba(43,15,58,.06), 0 8px 24px rgba(43,15,58,.07);
+  --font:'Segoe UI', system-ui, -apple-system, 'Noto Sans', sans-serif;
+}
+
+* { box-sizing:border-box; }
+
+html { -webkit-text-size-adjust:100%; }
+
+body {
+  margin:0; overflow-x:hidden; font-family:var(--font); color:var(--ink); background:var(--bg);
+  line-height:1.55; font-size:16px;
+}
+
+body[dir="rtl"] { font-family:'Segoe UI', 'Noto Nastaliq Urdu', system-ui, sans-serif; }
+
+h1,h2,h3 { line-height:1.25; margin:0 0 .4em; letter-spacing:-.01em; }
+h1 { font-size:clamp(1.5rem, 1.2rem + 1.4vw, 2.1rem); }
+h2 { font-size:clamp(1.1rem, 1rem + .5vw, 1.35rem); }
+p { margin:0 0 .8em; }
+
+.wrap { width:min(1180px, 100% - 2rem); margin-inline:auto; }
+.muted { color:var(--ink-soft); }
+.small { font-size:.85rem; }
+
+/* Focus is never removed — only restyled. */
+:focus-visible {
+  outline:3px solid var(--plum-500); outline-offset:2px; border-radius:4px;
+}
+
+/* Hidden by clipping, not by an off-canvas offset. `left:-9999px` pushes the document
+   11,000px wide in RTL, which is how this was found — the Urdu layout overflowed. */
+.skip-link {
+  position:absolute; top:0; inset-inline-start:0; z-index:100;
+  background:var(--plum-700); color:#fff; padding:.7rem 1.1rem;
+  border-radius:0 0 var(--radius-sm) 0;
+  clip-path:inset(50%); width:1px; height:1px; overflow:hidden; white-space:nowrap;
+}
+.skip-link:focus {
+  clip-path:none; width:auto; height:auto; overflow:visible;
+}
+
+/* ---------- Top bar ---------- */
+
+.topbar {
+  background:linear-gradient(120deg, var(--plum-900), var(--plum-600));
+  color:#fff; padding:.85rem 0; position:sticky; top:0; z-index:20;
+}
+.topbar-inner { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.brand { display:flex; align-items:center; gap:.7rem; }
+.brand-mark {
+  width:38px; height:38px; border-radius:11px; display:grid; place-items:center;
+  background:rgba(255,255,255,.16); font-weight:700; letter-spacing:.02em; flex-shrink:0;
+}
+.brand-text { display:flex; flex-direction:column; line-height:1.2; }
+.brand-text strong { font-size:1.12rem; }
+.brand-text small { opacity:.85; font-size:.78rem; }
+.topbar-actions { display:flex; gap:.4rem; align-items:center; }
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  font:inherit; font-weight:600; border-radius:var(--radius-sm); border:1px solid transparent;
+  padding:.6rem 1rem; cursor:pointer; display:inline-flex; align-items:center; gap:.45rem;
+  transition:background .15s, border-color .15s, transform .05s; min-height:44px;
+}
+.btn:active { transform:translateY(1px); }
+.btn-primary { background:var(--plum-600); color:#fff; }
+.btn-primary:hover { background:var(--plum-700); }
+.btn-ghost { background:rgba(255,255,255,.12); color:inherit; border-color:rgba(255,255,255,.28); }
+.btn-ghost:hover { background:rgba(255,255,255,.2); }
+main .btn-ghost { background:#fff; color:var(--plum-700); border-color:var(--line); }
+main .btn-ghost:hover { background:var(--plum-100); }
+.btn-approve { background:var(--low); color:#fff; }
+.btn-approve:hover { filter:brightness(.92); }
+.btn-reject { background:#fff; color:var(--high); border-color:currentColor; }
+.btn:disabled { opacity:.55; cursor:not-allowed; }
+
+/* ---------- Layout ---------- */
+
+.panel {
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  padding:1.4rem; margin:1.1rem 0; box-shadow:var(--shadow);
+}
+.page-head {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:1rem; flex-wrap:wrap; margin:1.6rem 0 .4rem;
+}
+.two-col { display:grid; gap:1.1rem; grid-template-columns:1fr; }
+@media (min-width:900px) { .two-col { grid-template-columns:1.05fr .95fr; } }
+
+/* ---------- Sign in ---------- */
+
+.signin { margin-top:2rem; }
+.profile-grid { display:grid; gap:.75rem; grid-template-columns:1fr; margin:1.2rem 0; }
+@media (min-width:640px) { .profile-grid { grid-template-columns:1fr 1fr; } }
+@media (min-width:1000px) { .profile-grid { grid-template-columns:repeat(3,1fr); } }
+
+.profile {
+  text-align:start; background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+  padding:1rem; cursor:pointer; font:inherit; display:flex; flex-direction:column; gap:.35rem;
+  transition:border-color .15s, box-shadow .15s;
+}
+.profile:hover { border-color:var(--plum-500); box-shadow:var(--shadow); }
+.profile strong { font-size:1.02rem; }
+.profile .role { font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; color:var(--plum-600); font-weight:700; }
+.profile .why { font-size:.87rem; color:var(--ink-soft); }
+
+/* ---------- Score ---------- */
+
+.score-card { display:grid; gap:1.3rem; grid-template-columns:1fr; align-items:start; }
+@media (min-width:720px) { .score-card { grid-template-columns:auto 1fr; } }
+
+.dial {
+  width:150px; height:150px; border-radius:50%; display:grid; place-items:center;
+  position:relative; margin-inline:auto;
+}
+.dial-inner {
+  width:118px; height:118px; border-radius:50%; background:#fff; display:grid;
+  place-items:center; text-align:center;
+}
+.dial-score { font-size:2.6rem; font-weight:700; line-height:1; }
+.dial-of { font-size:.75rem; color:var(--ink-soft); }
+
+.band-chip {
+  display:inline-flex; align-items:center; gap:.4rem; font-weight:700; font-size:.8rem;
+  text-transform:uppercase; letter-spacing:.06em; padding:.32rem .7rem; border-radius:999px;
+}
+.band-low      { background:var(--low-bg);      color:var(--low); }
+.band-moderate { background:var(--moderate-bg); color:var(--moderate); }
+.band-elevated { background:var(--elevated-bg); color:var(--elevated); }
+.band-high     { background:var(--high-bg);     color:var(--high); }
+.band-refused  { background:var(--refused-bg);  color:var(--refused); }
+
+/* ---------- Refusal: a first-class state, not an error ---------- */
+
+.refusal {
+  border-inline-start:5px solid var(--refused); background:var(--refused-bg);
+  border-radius:var(--radius); padding:1.3rem;
+}
+.refusal h2 { display:flex; align-items:center; gap:.5rem; }
+.refusal .why-list { margin:.6rem 0 0; padding-inline-start:1.2rem; }
+.refusal .why-list li { margin:.25rem 0; }
+
+/* ---------- Evidence ---------- */
+
+.evidence { margin-top:1rem; }
+.rule {
+  border:1px solid var(--line); border-radius:var(--radius-sm); padding:.8rem 1rem;
+  margin:.5rem 0; background:#fff; display:flex; gap:.85rem; align-items:flex-start;
+}
+.rule-points {
+  font-weight:700; font-variant-numeric:tabular-nums; color:var(--plum-700);
+  background:var(--plum-100); border-radius:7px; padding:.15rem .5rem; flex-shrink:0;
+  min-width:2.6rem; text-align:center;
+}
+.rule-body { flex:1; min-width:0; }
+.rule-because { margin:0 0 .3rem; }
+.tag {
+  display:inline-block; font-size:.7rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.05em; padding:.15rem .5rem; border-radius:999px; margin-inline-end:.3rem;
+}
+.tag-sex { background:var(--plum-100); color:var(--plum-700); }
+.tag-src { background:#eef1f5; color:#4a5568; font-weight:600; text-transform:none; letter-spacing:0; }
+
+.metric-table { width:100%; border-collapse:collapse; font-size:.92rem; }
+.metric-table caption { text-align:start; color:var(--ink-soft); font-size:.85rem; padding-bottom:.5rem; }
+.metric-table th, .metric-table td { text-align:start; padding:.55rem .5rem; border-bottom:1px solid var(--line); }
+.metric-table th { font-size:.76rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); }
+.metric-table td.num { font-variant-numeric:tabular-nums; }
+.stale { color:var(--high); font-weight:600; }
+
+.table-scroll { overflow-x:auto; }
+
+/* ---------- Notices ---------- */
+
+.notice {
+  border-radius:var(--radius-sm); padding:.8rem 1rem; margin:.8rem 0; font-size:.92rem;
+  border-inline-start:4px solid var(--plum-500); background:var(--plum-100);
+}
+.notice-warn { border-color:var(--elevated); background:var(--elevated-bg); }
+.notice-ok { border-color:var(--low); background:var(--low-bg); }
+
+/* ---------- Squad ---------- */
+
+.squad-grid { display:grid; gap:1rem; grid-template-columns:1fr; }
+@media (min-width:760px) { .squad-grid { grid-template-columns:1fr 1fr; } }
+
+.squad-card { background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:1.2rem; box-shadow:var(--shadow); }
+.squad-card header { display:flex; justify-content:space-between; align-items:center; gap:.6rem; margin-bottom:.6rem; }
+.actions { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.9rem; }
+
+/* ---------- Forms ---------- */
+
+.field { display:flex; flex-direction:column; gap:.3rem; margin:.7rem 0; font-size:.9rem; font-weight:600; }
+.field input, .field select {
+  font:inherit; font-weight:400; padding:.6rem .7rem; border:1px solid var(--line);
+  border-radius:var(--radius-sm); background:#fff; min-height:44px; color:var(--ink);
+}
+.metric-form { display:grid; gap:.6rem; align-items:end; grid-template-columns:1fr; }
+@media (min-width:560px) { .metric-form { grid-template-columns:1fr 1fr auto; } }
+
+.advanced { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.advanced summary { cursor:pointer; font-weight:600; color:var(--plum-700); padding:.35rem 0; min-height:32px; }
+
+/* ---------- Audit ---------- */
+
+.audit { font-size:.9rem; }
+.hash { font-family:ui-monospace, 'Cascadia Code', Consolas, monospace; font-size:.78rem; color:var(--ink-soft); word-break:break-all; }
+.chain-ok { color:var(--low); font-weight:700; }
+.chain-bad { color:var(--high); font-weight:700; }
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position:fixed; inset-block-end:1.2rem; left:50%; transform:translateX(-50%);
+  background:var(--ink); color:#fff; padding:.8rem 1.2rem; border-radius:var(--radius-sm);
+  box-shadow:var(--shadow); z-index:50; max-width:min(90vw, 460px);
+}
+
+.footer { padding:2rem 0 3rem; color:var(--ink-soft); font-size:.9rem; }
+
+.spinner {
+  width:22px; height:22px; border:3px solid var(--line); border-top-color:var(--plum-600);
+  border-radius:50%; animation:spin .7s linear infinite; margin:1.5rem auto;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from conftest import snapshot
+from helpers import snapshot
 from risk_engine.engine import assess
 from risk_engine.factors import build_profile
 from risk_engine.types import Assessment, CycleState

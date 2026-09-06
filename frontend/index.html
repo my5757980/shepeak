@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShePeak — Injury risk built for women athletes</title>
+<meta name="description" content="Deterministic injury-risk scoring for women athletes. Every score cites its evidence; no plan activates without human approval.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏏</text></svg>">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">SP</span>
+      <span class="brand-text">
+        <strong>ShePeak</strong>
+        <small data-i18n="tagline">Injury risk, built for women athletes</small>
+      </span>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="langToggle" class="btn btn-ghost" type="button" aria-label="Switch language">
+        <span aria-hidden="true">🌐</span> <span id="langLabel">اردو</span>
+      </button>
+      <button id="signOut" class="btn btn-ghost" type="button" hidden data-i18n="signOut">Sign out</button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <!-- ============ Sign in ============ -->
+  <section id="signInView" class="panel signin">
+    <h1 data-i18n="signInTitle">Sign in</h1>
+    <p class="muted" data-i18n="signInHelp">
+      Choose a demo profile. Each one exercises a different guarantee — including the ones
+      where the system refuses to answer.
+    </p>
+
+    <div id="demoProfiles" class="profile-grid" role="list"></div>
+
+    <details class="advanced">
+      <summary data-i18n="pasteToken">Or paste an access token</summary>
+      <label class="field">
+        <span data-i18n="tokenLabel">Access token</span>
+        <input id="tokenInput" type="text" autocomplete="off" spellcheck="false" placeholder="eyJhbGciOi...">
+      </label>
+      <button id="tokenGo" class="btn btn-primary" type="button" data-i18n="continue">Continue</button>
+    </details>
+  </section>
+
+  <!-- ============ Athlete ============ -->
+  <section id="athleteView" hidden>
+    <div class="page-head">
+      <div>
+        <h1 id="athleteName">—</h1>
+        <p class="muted" id="athleteMeta"></p>
+      </div>
+      <button id="refreshBtn" class="btn btn-ghost" type="button" data-i18n="refresh">Refresh</button>
+    </div>
+
+    <div id="assessmentSlot" aria-live="polite"></div>
+
+    <div class="two-col">
+      <section class="panel" aria-labelledby="planHead">
+        <h2 id="planHead" data-i18n="planTitle">This week's plan</h2>
+        <div id="planSlot"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="metricsHead">
+        <h2 id="metricsHead" data-i18n="metricsTitle">Your recorded data</h2>
+        <div id="metricsSlot"></div>
+        <details class="advanced">
+          <summary data-i18n="addMetric">Add a measurement</summary>
+          <form id="metricForm" class="metric-form">
+            <label class="field">
+              <span data-i18n="metricKind">Measurement</span>
+              <select id="metricKind">
+                <option value="training_load">Training load</option>
+                <option value="bowling_load">Bowling load (overs)</option>
+                <option value="sleep">Sleep (hours)</option>
+                <option value="soreness">Soreness (0–10)</option>
+                <option value="cycle_phase">Cycle phase</option>
+                <option value="contraception_status">Hormonal contraception</option>
+                <option value="iron_status">Ferritin (ng/mL)</option>
+              </select>
+            </label>
+            <label class="field">
+              <span data-i18n="metricValue">Value</span>
+              <input id="metricValue" type="text" required autocomplete="off">
+            </label>
+            <button class="btn btn-primary" type="submit" data-i18n="save">Save</button>
+          </form>
+        </details>
+      </section>
+    </div>
+
+    <section class="panel" aria-labelledby="consentHead">
+      <h2 id="consentHead" data-i18n="consentTitle">Your consent</h2>
+      <p class="muted" data-i18n="consentHelp">
+        Your health data is only processed for purposes you have agreed to. Withdrawing consent
+        stops processing straight away — it is enforced by the database, not by the app.
+      </p>
+      <div id="consentSlot"></div>
+    </section>
+  </section>
+
+  <!-- ============ Coach ============ -->
+  <section id="coachView" hidden>
+    <div class="page-head">
+      <div>
+        <h1 data-i18n="coachTitle">Squad</h1>
+        <p class="muted" data-i18n="coachHelp">
+          Plans following elevated or high risk cannot activate without your approval.
+        </p>
+      </div>
+      <button id="coachRefresh" class="btn btn-ghost" type="button" data-i18n="refresh">Refresh</button>
+    </div>
+    <div id="squadSlot" class="squad-grid" aria-live="polite"></div>
+  </section>
+
+  <!-- ============ Audit ============ -->
+  <section id="auditPanel" class="panel audit" hidden aria-labelledby="auditHead">
+    <h2 id="auditHead" data-i18n="auditTitle">Audit trail</h2>
+    <div id="auditSlot"></div>
+  </section>
+
+</main>
+
+<footer class="wrap footer">
+  <p>
+    <strong>ShePeak</strong> — ICC × Ignyte Hackathon prototype.
+    <span data-i18n="footerNote">
+      Training guidance only. Not a medical device, and not a diagnosis.
+    </span>
+  </p>
+  <p class="muted small" data-i18n="footerProvisional">
+    Risk thresholds are provisional engineering defaults pending sports-science validation.
+  </p>
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="/assets/i18n.js"></script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

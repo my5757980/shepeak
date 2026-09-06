@@ -9,7 +9,7 @@ from datetime import timedelta
 
 import pytest
 
-from conftest import metric, snapshot
+from helpers import metric, snapshot
 from risk_engine.engine import assess
 from risk_engine.types import (
     FRESHNESS_WINDOWS,

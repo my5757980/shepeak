@@ -11,7 +11,7 @@ from datetime import timedelta
 
 import pytest
 
-from conftest import snapshot
+from helpers import snapshot
 from risk_engine.engine import assess
 from risk_engine.types import Assessment, MetricKind, Refusal, RefusalReason
 
@@ -49,7 +49,7 @@ class TestStaleInputs:
         [("training_load", 48), ("sleep", 24), ("soreness", 24)],
     )
     def test_stale_beyond_window_refuses(self, now, kind, window_hours):
-        from conftest import metric
+        from helpers import metric
 
         mk = MetricKind[kind.upper()]
         aged = metric(mk, 100.0 if kind == "training_load" else 8.0,
@@ -60,7 +60,7 @@ class TestStaleInputs:
         assert kind in result.offending_inputs
 
     def test_stale_refusal_states_how_stale(self, now):
-        from conftest import metric
+        from helpers import metric
 
         aged = metric(MetricKind.SLEEP, 8.0, age=timedelta(hours=30))
         result = assess(snapshot(sleep=aged), now)
