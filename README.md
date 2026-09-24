@@ -28,7 +28,7 @@ python -m uvicorn api.main:app --app-dir src --port 8000
 Open **http://localhost:8000** and pick a demo profile.
 
 ```bash
-python -m pytest                     # 112 tests
+python -m pytest                     # 181 tests
 python -m pytest tests/security -q   # RLS bypass + audit tamper attempts
 ```
 
@@ -80,7 +80,7 @@ backend/src/orchestrator/   Assessment flow, plan proposal, approval gate
 backend/src/audit/          Chain append and verification
 backend/src/api/            FastAPI, JWT, request-scoped RLS identity
 backend/migrations/         Schema, audit triggers, RLS policies, app role
-backend/tests/              112 tests — unit, refusal, security, integration
+backend/tests/              181 tests — unit, refusal, security, integration
 frontend/                   Responsive bilingual UI (English + Urdu, RTL)
 specs/001-athlete-health-core/   Spec, plan, tasks, hackathon alignment
 history/adr/                Architecture decision records

@@ -74,7 +74,7 @@ translated, not only the menus: a reason an athlete cannot read is no explanatio
 ## Status and honesty
 
 Working prototype: deterministic engine, live PostgreSQL enforcement, API, and a responsive
-bilingual interface. **112 automated tests pass**, including refusal paths, RLS bypass attempts,
+bilingual interface. **181 automated tests pass**, including refusal paths, RLS bypass attempts,
 audit tamper detection, and score repeatability trials.
 
 Three limits we state rather than hide:

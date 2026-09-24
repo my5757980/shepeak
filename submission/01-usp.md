@@ -96,7 +96,7 @@ We think this matters as much as the claims.
 
 ## Evidence this is real
 
-- **112 automated tests**, including refusal-path tests for every fail-closed condition, live
+- **181 automated tests**, including refusal-path tests for every fail-closed condition, live
   PostgreSQL tests that attempt RLS bypass and audit tampering, and repeatability trials.
 - A ratified project constitution, an architecture decision record, and a specification whose
   29 requirements each trace to a task and a test.

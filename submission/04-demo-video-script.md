@@ -119,7 +119,7 @@ ready in a second window for the test run at 2:05.
 ### 2:40–2:52 — Close
 
 > "ShePeak: deterministic injury risk for women athletes. The guarantees are in the code and
-> the database, not in a model. 112 tests, running today from a single compose file.
+> the database, not in a model. 181 tests, running today from a single compose file.
 >
 > Cricket-first — bowling workload is a first-class input — and the engine runs unchanged for
 > other sports."

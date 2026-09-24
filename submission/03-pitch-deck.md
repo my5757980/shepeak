@@ -66,7 +66,7 @@ self-approve. A guarantee with a convenient exception is not a guarantee.
 > - **Append-only, hash-chained audit**, written before the response returns. Tampering is detected.
 > - **Withdraw consent → processing stops**, enforced at the data layer.
 >
-> **112 automated tests** — refusal paths, RLS bypass attempts, audit tamper detection, repeatability trials.
+> **181 automated tests** — refusal paths, RLS bypass attempts, audit tamper detection, repeatability trials.
 >
 > *What we don't claim:* tamper-evident, **not** independently verifiable. External anchoring is on the roadmap, not built.
 
